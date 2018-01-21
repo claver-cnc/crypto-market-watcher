@@ -51,4 +51,15 @@ process.on('uncaughtException', (err) => {
   process.exit(1);
 });
 
+var pusher = new Pusher('460839', {
+  cluster: 'eu'
+});
+
+var channel = pusher.subscribe('live_trades');
+
+channel.bind('trade', function(data) {
+  alert('An event was triggered with message: ' + data.message);
+});
+
+
 export default app;
