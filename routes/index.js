@@ -8,35 +8,35 @@ router.get('/', (req, res) => {
     title: 'Express'
   });
 
+});
 
+var Pusher = require('pusher');
 
+var pusher = new Pusher({
+  appId: '460839',
+  key: 'e4fd3d985f7dd377ac04',
+  secret: '8d98d74f9ae363229a5e',
+  cluster: 'eu'
 
 });
+
+pusher.trigger('live_trades ', 'trade', {"message": "Test Ok"});
+
 
 
 /*router.get('/currency', (req, res, next) => {
   request("https://www.bitstamp.net/api/v2/ticker/btcusd/", function(err,res,body) {
-    var coinList = JSON.parse(body);
-    console.log(coinList);
+    console.log();
 
   });
-  res.render('currency',{coinList});
+  res.render('',);
 });
 
-router.get('/test', (req, res, next) => {
-  var coins = request({
-    uri: 'https://api.coinmarketcap.com/v1/ticker/?limit=10'
-  }).pipe(res);
-  console.log(coins)
-}); */
 
-router.get('/currency', (req, res, next) => {
-  request("https://api.coinmarketcap.com/v1/ticker/?limit=10", function(err,res,body) {
-    var coinList = JSON.parse(body);
-    console.log(coinList);
+https://pusher.com/docs/javascript_quick_start
 
-  });
-  res.render('currency',{coinList});
-});
+https://www.bitstamp.net/websocket/
+
+*/
 
 export default router;
