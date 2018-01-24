@@ -4,9 +4,23 @@ import Debug from 'debug';
 import express from 'express';
 import logger from 'morgan';
 import path from 'path';
+//import mongoose from 'mongoose' ;
 // import favicon from 'serve-favicon';
 
 import index from './routes/index';
+
+const session = require('express-session');
+const passport = require('passport') ;
+
+const mongoose = require('mongoose') ;
+mongoose.Promise = global.Promise ;
+
+//Mongoose config 
+mongoose.connect('mongodb://localhost:27017/passportTest')
+  .then(() =>  console.log(' success !!'))
+  .catch((err) => console.error(err)
+    );
+
 
 const app = express();
 const debug = Debug('crypto-martket-watcher:app');
@@ -24,6 +38,18 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(session({
+  secret: 'jkfdghijfkhgfjhs6sd',
+  resave: false, 
+  saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+
+app.use(passport.session());
+
+require('./passportConf').configure(passport);
 
 app.use('/', index);
 
@@ -50,7 +76,5 @@ process.on('uncaughtException', (err) => {
   debug('Caught exception: %j', err);
   process.exit(1);
 });
-
-
 
 export default app;

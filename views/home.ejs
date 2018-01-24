@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Home</title>
+    <link rel='stylesheet' href='/stylesheets/css/bootstrap.min.css' />
+    <link rel="stylesheet" href='/stylesheets/style.css' />
+  	
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <!-- Main component for a primary marketing message or call to action -->
+      <div class="jumbotron">
+       <center> <h1>CryptoCurrency </h1> </center>
+       <br>
+       <div class="row">
+  <div class="col-sm-4">
+  		<p>
+          <a class="btn btn-lg btn-primary"  role="button">Asking Price</a>
+        </p>
+        <div id="ValueAsk" class="huge"></div>
+  </div>
+  <div class="col-sm-4">
+  		<p>
+          <a class="btn btn-lg btn-primary"  role="button">Last Price</a>
+        </p>
+        <div id="lastValue" class="huge">12</div>
+  </div>
+  <div class="col-sm-4">
+  	<p>
+          <a class="btn btn-lg btn-primary" role="button">Bidding Price</a>
+        </p>
+        <div id="bidValue" class="huge">124</div>
+  </div>
+</div> 
+ </div>
+    </div> <!-- /container -->
+    <script>
+    var ws = new WebSocket("wss://api.bitfinex.com/ws");
+    ws.onopen = function() {
+        ws.send(JSON.stringify({
+            "event": "subscribe",
+            "channel": "ticker",
+            "pair": "BTCUSD"
+        }));
+    };
+    ws.onmessage = function(msg) {
+        var response = JSON.parse(msg.data);
+        console.log(response);
+        var hb = response[1];
+        if (hb != "hb") {
+            document.getElementById("ValueAsk").textContent = response[4];
+            document.getElementById("lastValue").textContent = response[8];
+            document.getElementById("bidValue").textContent = response[1];
+        }
+    };
+    </script>
+  </body>
+</html>

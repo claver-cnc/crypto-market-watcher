@@ -1,42 +1,69 @@
 import express from 'express';
 
 const router = express.Router();
+const User = require('../models/user') ;
+const passport = require('passport') ;
 
-/* GET index page. */
+/* GET index page.
 router.get('/', (req, res) => {
   res.render('index', {
-    title: 'Express'
+    title: 'Express Claver Nambegue Coulibaly'
   });
-
 });
 
-var Pusher = require('pusher');
-
-var pusher = new Pusher({
-  appId: '460839',
-  key: 'e4fd3d985f7dd377ac04',
-  secret: '8d98d74f9ae363229a5e',
-  cluster: 'eu'
-
+ */
+ /* GET page home */
+router.get('/home', (req, res) => {
+  res.render('home');
 });
 
-pusher.trigger('live_trades ', 'trade', {"message": "Test Ok"});
 
-
-
-/*router.get('/currency', (req, res, next) => {
-  request("https://www.bitstamp.net/api/v2/ticker/btcusd/", function(err,res,body) {
-    console.log();
-
+router.get('/', (req, res) => {
+  res.render('index', {
+    title: 'Express Claver Nambegue Coulibaly'
   });
-  res.render('',);
+});
+
+/* GET index page. */
+router.post('/', passport.authentificate('local', {
+
+	successRedirect: '/home', 
+	failureRedirect: '/'
+  /*User.authentificate(req.body.email, req.body.password, (err, user) =>{
+  	if(err || user==false){
+  		console.log('problem logging in', err);
+  		res.redirect('/login') ;
+  	} else{
+  		console.log('successful login');
+  		res.redirect('/home') ;
+  	}
+  	})
+  */
+
+}));
+
+
+/* GET page home */
+router.get('/register', (req, res) => {
+  res.render('register');
+});
+
+router.post('/register', (req, res) => {
+	console.log('body', req.body) ;
+
+const user = new User({ email: req.body.email, 
+	password: req.body.pwd });
+
+user.save((err) =>{
+	if(err){
+		console.log('There was an error saving the User', err);
+	}
+
+	res.redirect('/home');
+});
+
 });
 
 
-https://pusher.com/docs/javascript_quick_start
-
-https://www.bitstamp.net/websocket/
-
-*/
 
 export default router;
